@@ -1,9 +1,6 @@
 'use client'
-import Image from "next/image";
 import {useState, useEffect, useCallback, useMemo} from "react"
-import {firestore} from "@/firebase"
 import { Box, Button, ButtonGroup, createTheme, darken, Modal, Stack, TextField, Typography } from "@mui/material";
-import { collection, deleteDoc, doc, getDoc, getDocs, query, runTransaction, setDoc, Transaction } from "firebase/firestore";
 import { Add, Remove, Edit, Delete } from "@mui/icons-material";
 import {InventoryManager} from "./inventoryManager";
 import UpdateModal from "./updateModal";
@@ -46,8 +43,6 @@ export default function Home() {
     const inventoryList = await IM.getInventoryList()
     setInventory(inventoryList)
   }
-
- 
 
   const addModal = (
     <Modal open={addModalState.isOpen} onClose={addModalState.close}>
