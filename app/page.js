@@ -3,9 +3,10 @@ import {useState, useEffect, useCallback, useMemo} from "react"
 import { Box, Button, ButtonGroup, createTheme, darken, Modal, Stack, TextField, Typography } from "@mui/material";
 import { Add, Remove, Edit, Delete } from "@mui/icons-material";
 import {InventoryManager} from "./inventoryManager";
-import UpdateModal from "./updateModal";
-import AddModal from "./addModal";
-import RemoveModal from "./removeModal";
+
+import UpdateModal from "./Modals/updateModal";
+import AddModal from "./Modals/addModal";
+import RemoveModal from "./Modals/removeModal";
 
 /*
 Things to consider:
