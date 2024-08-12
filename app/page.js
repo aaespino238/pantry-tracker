@@ -4,6 +4,7 @@ import { Box, Button, ButtonGroup, createTheme, darken, Modal, Stack, TextField,
 import { Add, Remove, Edit, Delete } from "@mui/icons-material";
 import {InventoryManager} from "./inventoryManager";
 import UpdateModal from "./updateModal";
+import AddModal from "./addModal";
 
 /*
 Things to consider:
@@ -43,59 +44,6 @@ export default function Home() {
     const inventoryList = await IM.getInventoryList()
     setInventory(inventoryList)
   }
-
-  const addModal = (
-    <Modal open={addModalState.isOpen} onClose={addModalState.close}>
-        <Box
-          position="absolute" 
-          top="50%"
-          left="50%"
-          width={400}
-          bgcolor="white"
-          border = "2px solid #000"
-          boxShadow={24}
-          p={4}
-          display="flex"
-          flexDirection="column"
-          gap={3}
-          sx={{
-            transform: "translate(-50%,-50%)",
-          }}
-        >
-          <Typography variant="h6">Add Item</Typography>
-          <Stack width="100%" direction="column" spacing={2}>
-            <TextField
-              fullWidth
-              value={itemName}
-              label="Item Name"
-              onChange={(e)=>{
-                setItemName(e.target.value)
-              }}
-            />
-            <TextField
-              fullWidth
-              value={itemQuantity}
-              label="Quantity"
-              onChange={(e)=>{
-                setItemQuantity(e.target.value)
-              }}
-            />
-            <Button 
-              variant="outlined" 
-              onClick={()=>{
-                IM.addItem(itemName, itemQuantity)
-                updateInventory()
-                setItemName('')
-                setItemQuantity(1)
-                addModalState.close()
-              }}
-            >
-              Add
-            </Button> 
-          </Stack>
-        </Box>
-    </Modal>
-    )
 
   const removeModal = (
     <Modal open = {removeModalState.isOpen} onClose={removeModalState.close}>
@@ -232,7 +180,17 @@ export default function Home() {
     updateInventory();
     setItemName('');
     setItemQuantity(1);
+    //not sure if close is necessary here
     updateModalState.close();
+  }, [IM, updateInventory, updateModalState.close]);
+
+  const handleAddItem = useCallback((name, quantity) => {
+    IM.addItem(name, quantity);
+    updateInventory();
+    setItemName('');
+    setItemQuantity(1);
+    //not sure if close is necessary here
+    addModalState.close();
   }, [IM, updateInventory, updateModalState.close]);
 
   useEffect(() => {
@@ -250,7 +208,15 @@ export default function Home() {
       alignItems="center"
       gap={2}
     >
-      {addModal}
+      <AddModal 
+        isOpen={addModalState.isOpen}
+        onClose={addModalState.close}
+        itemName={itemName}
+        itemQuantity={itemQuantity}
+        onAddItem={handleAddItem}
+        onChangeQuantity={setItemQuantity}
+        onChangeName={setItemName}
+      />
       <UpdateModal 
         isOpen={updateModalState.isOpen}
         onClose={updateModalState.close}
