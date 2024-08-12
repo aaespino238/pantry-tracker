@@ -5,6 +5,7 @@ import { Add, Remove, Edit, Delete } from "@mui/icons-material";
 import {InventoryManager} from "./inventoryManager";
 import UpdateModal from "./updateModal";
 import AddModal from "./addModal";
+import RemoveModal from "./removeModal";
 
 /*
 Things to consider:
@@ -44,69 +45,6 @@ export default function Home() {
     const inventoryList = await IM.getInventoryList()
     setInventory(inventoryList)
   }
-
-  const removeModal = (
-    <Modal open = {removeModalState.isOpen} onClose={removeModalState.close}>
-      <Box
-        position="absolute" 
-        top="50%"
-        left="50%"
-        width={400}
-        bgcolor="white"
-        border = "2px solid #000"
-        boxShadow={24}
-        p={4}
-        display="flex"
-        flexDirection="column"
-        gap={3}
-        sx={{
-          transform: "translate(-50%,-50%)",
-        }}
-      >
-        <Stack width="100%" direction="column" spacing={2}> 
-          <Typography>
-            Are you sure 
-          </Typography>
-          <Button 
-            onClick={() => {
-            IM.clearItem(itemName)
-            setItemName('')
-            updateInventory()
-            removeModalState.close()
-            }}
-          >
-            <Delete></Delete>
-          </Button>
-        </Stack>    
-      </Box>
-    </Modal>
-  )
-  
-  const addRemoveButtonGroup = (
-    <ButtonGroup
-      orientation="horizontal"
-      color="primary"
-      aria-label="vertical outlined primary button group"
-    >
-      <Button
-        variant="contained"
-        color="secondary"
-        type="button"
-        endIcon={<Add />}
-        onClick = {()=>{ addItem(name) }}
-      >
-        Add
-      </Button>
-      <Button 
-        color="primary" 
-        type="button" 
-        endIcon={<Remove />}
-        onClick = {()=>{ removeItem(name) }}
-      >
-        Remove
-      </Button>
-    </ButtonGroup>
-  )
 
   const InventoryStackItem =  ({name, quantity}) => {
     const [isHovered, setIsHovered] = useState(false)
@@ -193,6 +131,14 @@ export default function Home() {
     addModalState.close();
   }, [IM, updateInventory, updateModalState.close]);
 
+  const handleClearItem = useCallback((name, quantity) => {
+    IM.clearItem(name);
+    updateInventory();
+    setItemName('');
+    //not sure if close is necessary here
+    removeModalState.close();
+  }, [IM, updateInventory, removeModalState.close]);
+
   useEffect(() => {
     updateInventory()
   }, [])
@@ -225,7 +171,12 @@ export default function Home() {
         onUpdateItem={handleUpdateItem}
         onChangeQuantity={setItemQuantity}
       />
-      {removeModal}
+      <RemoveModal
+        isOpen={removeModalState.isOpen}
+        onClose={removeModalState.close}
+        itemName={itemName}
+        onClearItem={handleClearItem}
+      />
 
       <Button variant="contained" onClick={addModalState.open}>
         Add New Item
