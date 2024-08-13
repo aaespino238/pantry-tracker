@@ -36,9 +36,33 @@ Cooking techniques and terminology
 Remember, your goal is to help users make the most of their available ingredients while providing a positive and helpful experience.`
 
 
-export async function POST(req){
-    const openai = new OpenAI()
-    const data = await req.json()
+    export async function POST(req){
+
+        //THIS IS FOR USING OPENAI MODEL 
+//     const openai = new OpenAI({
+//         apiKey: process.env.OPENAI_API_KEY,
+//         organization: "org-jpXjH7T8YhKwZgKgfybKFr2O",
+//         project: "proj_EarpypAGODq4rrDnlMsjRkt5",
+//     });
+//     const data = await req.json()
+
+//     const completion = await openai.chat.completions.create({
+//         messages: [
+//         {
+//             role: 'system',
+//             content: systemPrompt,
+//         },
+//         ...data,
+//         ],
+//         model: 'gpt-4o-mini',
+//         stream: true,
+//     })
+
+    //THIS IS FOR LLAMA
+    const openai = new OpenAI({
+        baseURL: "https://openrouter.ai/api/v1",
+        apiKey: process.env.OPENROUTER_API_KEY,
+    })
 
     const completion = await openai.chat.completions.create({
         messages: [
@@ -48,7 +72,7 @@ export async function POST(req){
         },
         ...data,
         ],
-        model: 'gpt-4o-mini',
+        model: "meta-llama/llama-3.1-8b-instruct:free",
         stream: true,
     })
 

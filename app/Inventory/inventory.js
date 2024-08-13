@@ -47,7 +47,7 @@ const InventoryStackItem = ({ name, quantity, onEdit, onDelete }) => {
         </Typography>
       </Box>
     );
-  };
+};
   
 const InventoryStack = ({ inventory, onEdit, onDelete }) => {
     return (
@@ -137,7 +137,7 @@ const useInventory = () => {
         handleAddItem,
         handleClearItem
     }
-}
+};
 
 export const InventoryDisplay = () => {
     const {
